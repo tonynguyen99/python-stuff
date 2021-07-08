@@ -1,39 +1,24 @@
-class User():
-    def __init__(self, name, age, gender):
-        self.name = name
-        self.age = age
-        self.gender = gender
-        
-        
-    def show_details(self):
-        print("Personal Details")
-        print("")
-        print("Name:", self.name)
-        print("Age:", self.age)
-        print("Gender:", self.gender)
-        
-
-class Bank(User):
-    def __init__(self, name, age, gender):
-        super().__init__(name, age, gender)
-        self.balance = 0
+class Card(object):
+    def __init__(self, suit, value):
+        self.suit = suit
+        self.value = value
         
     
-    def deposit(self, deposit_amount):
-        self.deposit_amount = deposit_amount
-        self.balance += deposit_amount
-        print("Account balanced has been updated: $", self.balance)
-        
-        
-    def withdraw(self, withdraw_amount):
-        self.withdraw_amount = withdraw_amount
-        if self.balance < withdraw_amount:
-            print("You have insufficient funds | Balance Available: $%s" % self.balance)
-        else:
-            self.balance -= self.withdraw_amount
-            print("Your account balance is now: $%s" % self.balance)
-            
-            
-    def view_balance(self):
-        self.show_details()
-        print("Account balance: %s" % self.balance)
+    def show(self):
+        print("{} of {}".format(self.suit, self.value))
+              
+              
+class Deck(object):
+    def __init__(self):
+        self.cards = []
+        self.build()
+    
+    def build(self):
+        for s in ["Spades", "Clubs", "Diamonds", "Hearts"]:
+            for v in range(1, 14):
+                self.cards.append(Card(s, v))
+                
+    
+    def show(self):
+        for c in self.cards:
+            c.show()
