@@ -34,9 +34,10 @@ headers = {
 product_links = []
 product_list = []
 
-def generate_product_links():
-    for x in range(1, 2):
-        r = requests.get(f'https://salefinder.com.au/coles-catalogue/coles-catalogue-vic-metro/40032/list?qs={x},,0,0,0')
+#n = number of pages in catalogue (inclusive)
+def generate_product_links(n):
+    for x in range(1, n):
+        r = requests.get(f'https://salefinder.com.au/coles-catalogue/coles-catalogue-vic-metro/40032/list?qs={n + 1},,0,0,0')
         soup = BeautifulSoup(r.content, 'lxml')
 
         for a in soup.find_all('a', {'class': 'item-name'}):
@@ -69,8 +70,17 @@ def convert_product_list_to_csv(product_list):
         dict_writer.writeheader()
         dict_writer.writerows(product_list)
 
+def get_valid_dates():
+    r = requests.get('https://salefinder.com.au/coles-catalogue/coles-catalogue-vic-metro/40032/list?qs=1,,0,0,0')
+    soup = BeautifulSoup(r.content, 'lxml')
+
+    valid_dates = soup.find('span', {'class': 'sale-dates'}).text
+    return valid_dates
+
+
 
 if __name__ == '__main__':
-    generate_product_links()
+    generate_product_links(28)
     get_product_details(product_links)
     convert_product_list_to_csv(product_list)
+    print(get_valid_dates())
